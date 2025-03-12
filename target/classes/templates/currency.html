@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Conversión de Monedas</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+	
+	<!-- Cabecera con enlace a /api/weather -->
+	  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+	    <a class="navbar-brand" th:href="@{/api/weather}">Ver Cambios de moneda</a>
+	    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" 
+	            aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+	      <span class="navbar-toggler-icon"></span>
+	    </button>
+	    <div class="collapse navbar-collapse" id="navbarContent">
+	      <ul class="navbar-nav mr-auto">
+	        <li class="nav-item">
+	          <a class="nav-link" th:href="@{/api/weather}">Clima</a>
+	        </li>
+	      </ul>
+	    </div>
+	  </nav>
+	
+  <div class="container mt-5">
+    <div class="row">
+      <!-- Formulario a la izquierda -->
+      <div class="col-md-6">
+        <h3>Buscar Conversión de Monedas</h3>
+        <form th:action="@{/api/currency}" method="post">
+          <div class="form-group">
+            <label for="base_code">Código Base</label>
+            <input type="text" class="form-control" id="base_code" name="base_code" placeholder="Ej: USD" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Buscar</button>
+        </form>
+      </div>
+      <!-- Tabla a la derecha -->
+      <div class="col-md-6">
+        <h3>Datos de Conversión</h3>
+        <div th:if="${currency != null}">
+          <table class="table table-bordered table-striped">
+            <tbody>
+              <tr>
+                <th>Hora</th>
+                <td th:text="${currency.hour}">Hora</td>
+              </tr>
+              <tr>
+                <th>Código Base</th>
+                <td th:text="${currency.base_code}">Código Base</td>
+              </tr>
+              <tr>
+                <th colspan="2" class="text-center">Tasas de Conversión</th>
+              </tr>
+              <tr>
+                <td>USD</td>
+                <td th:text="${currency.conversion_rates.usd}">USD</td>
+              </tr>
+              <tr>
+                <td>AUD</td>
+                <td th:text="${currency.conversion_rates.aud}">AUD</td>
+              </tr>
+              <tr>
+                <td>BRL</td>
+                <td th:text="${currency.conversion_rates.brl}">BRL</td>
+              </tr>
+              <tr>
+                <td>EUR</td>
+                <td th:text="${currency.conversion_rates.eur}">EUR</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div th:unless="${currency != null}" class="alert alert-info">
+          No hay datos disponibles
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Bootstrap JS y dependencias -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

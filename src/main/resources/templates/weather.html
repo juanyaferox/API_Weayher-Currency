@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Consulta de Clima</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+	
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		    <a class="navbar-brand" th:href="@{/api/currency}">Ver Clima</a>
+		    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" 
+		            aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+		      <span class="navbar-toggler-icon"></span>
+		    </button>
+		    <div class="collapse navbar-collapse" id="navbarContent">
+		      <ul class="navbar-nav mr-auto">
+		        <li class="nav-item">
+		          <a class="nav-link" th:href="@{/api/currency}">Cambios de moneda</a>
+		        </li>
+		      </ul>
+		    </div>
+		  </nav>
+	
+  <div class="container mt-5">
+    <div class="row">
+      <!-- Formulario a la izquierda -->
+      <div class="col-md-6">
+        <h3>Buscar Clima</h3>
+        <form th:action="@{/api/weather}" method="post">
+          <div class="form-group">
+            <label for="cityName">Ciudad</label>
+            <input type="text" class="form-control" id="cityName" name="cityName" placeholder="Ingrese la ciudad" required>
+          </div>
+          <div class="form-group">
+            <label for="country">País</label>
+            <input type="text" class="form-control" id="country" name="country" placeholder="Ingrese el país" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Buscar</button>
+        </form>
+      </div>
+      <!-- Tabla a la derecha -->
+      <div class="col-md-6">
+        <h3>Datos del Clima</h3>
+        <div th:if="${weather != null}">
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>Propiedad</th>
+                <th>Valor</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Datos del objeto Weather -->
+              <tr>
+                <td>Ciudad</td>
+                <td th:text="${weather.name}">Nombre de la ciudad</td>
+              </tr>
+              <tr>
+                <td>Código</td>
+                <td th:text="${weather.cod}">Código</td>
+              </tr>
+              <!-- Datos del objeto WeatherMain -->
+              <tr>
+                <td>Temperatura</td>
+                <td th:text="${weather.main.temp}">Temperatura</td>
+              </tr>
+              <tr>
+                <td>Feels Like</td>
+                <td th:text="${weather.main.feels_like}">Feels Like</td>
+              </tr>
+              <tr>
+                <td>Temp. Mínima</td>
+                <td th:text="${weather.main.temp_min}">Temp. Mínima</td>
+              </tr>
+              <tr>
+                <td>Temp. Máxima</td>
+                <td th:text="${weather.main.temp_max}">Temp. Máxima</td>
+              </tr>
+              <tr>
+                <td>Presión</td>
+                <td th:text="${weather.main.pressure}">Presión</td>
+              </tr>
+              <!-- Datos de la lista weather (WeatherWeather) -->
+              <tr>
+                <td colspan="2">
+                  <h5>Información Adicional</h5>
+                  <table class="table table-sm table-bordered">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Main</th>
+                        <th>Descripción</th>
+                        <th>Icono</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr th:each="w : ${weather.weather}">
+                        <td th:text="${w.id}">ID</td>
+                        <td th:text="${w.main}">Main</td>
+                        <td th:text="${w.description}">Descripción</td>
+                        <td>
+                          <img th:src="@{'http://openweathermap.org/img/w/' + ${w.icon} + '.png'}" alt="Icono">
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div th:unless="${weather != null}" class="alert alert-info">
+          No hay datos disponibles
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Bootstrap JS y dependencias -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
